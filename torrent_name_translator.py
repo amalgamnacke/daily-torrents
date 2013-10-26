@@ -1,17 +1,27 @@
-import re
+import re, urllib
 
 class TorrentNameTranslator():
 	def __init__(self):
-		self.reg_torrent = r"^(.*)\.\d{4}\..*\.(\d{3,4}p)\."
-		self.reg_torrent_size = r"Storlek (.*)&nbsp;(.*),"
+		self.reg_torrent = r"^(.*)\.(3D)*(\d{4}).*(1080p|720p).*"
+		self.reg_torrent_size = r".*Size (\d{1,4}\.\d{1,4}).(GiB|MiB).*"
 
 	def translate_torrent(self, torrent):
-		translation = {}
+		translation = {
+			"name": "",
+			"year": 0,
+			"1080p": False,
+			"720p": False,
+			"PublicHD": False
+		}
 
 		result = re.match(self.reg_torrent, torrent)
-		if name == None:
+		if result == None:
 			print "Could not find name in torrent string: " + torrent
 			return
+		#print result.group(1)
+		#print result.group(2)
+		#print result.group(3)
+		#print result.group(4)
 		try:
 			translation["name"] = result.group(1)
 		except:
@@ -28,19 +38,26 @@ class TorrentNameTranslator():
 				translation["720p"] = True
 		except:
 			pass
-		translation["PublicHD"] = result.count("PublicHD") > 0
+		try:
+			count = result.group().count("PublicHD")
+			if count > 0:
+				translation["PublicHD"] = True
+		except:
+			pass
 		
 		return translation
 
 	def translate_size(self, text):
-		size = 1000000
-		result = re.findall(self.reg_torrent_size, text)
+		if text == None: return text
+		
 		try:
-			if result[1] == "GiB":
-				return int(float(result[0]) * 1000)
-			elif result[1] == "MiB":
-				result int(result[0])
-			else
-				return size
+			result = re.match(self.reg_torrent_size, text)
+
+			if result.group(2) == "GiB":
+				return int(float(result.group(1)) * 1000)
+			elif result.group(2) == "MiB":
+				return int(float(result.group(1)))
+			else:
+				return None
 		except:
-			return size
+			return None

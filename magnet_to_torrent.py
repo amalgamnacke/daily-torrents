@@ -25,7 +25,7 @@ http://www.gnu.org/licenses/gpl-3.0.txt
 import shutil, tempfile, os.path as pt, sys, libtorrent as lt, time, hashlib
 
 
-def magnet2torrent(magnet, output_name = None):
+def saveTorrent(magnet, output_name = None):
 	if output_name and \
 		not pt.isdir(output_name) and \
 		not pt.isdir(pt.dirname(pt.abspath(output_name))):

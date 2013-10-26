@@ -2,7 +2,7 @@ import sqlite3 as lite
 
 class DailyTorrentsDatabase:
 	def __init__(self):
-		self.database_name = "daily-torrents-database.db"
+		self.database_name = "daily_torrents_database.db"
 
 		# Initialize database
 		print "Initializing SQLITE3: " + self.database_name
@@ -27,7 +27,7 @@ class DailyTorrentsDatabase:
 			return
 		return con	
 
-	def movieExists(self, title):
+	def movie_exists(self, title):
 		con = self.get_DB_connection()
 		cur = con.cursor()
 
@@ -37,7 +37,7 @@ class DailyTorrentsDatabase:
 		con.close()
 		return data != None
 
-	def insertMovie(self, title, year, filename, magnet_url):
+	def insert_movie(self, title, year, filename, magnet_url):
 		con = self.get_DB_connection()
 		cur = con.cursor()
 
@@ -45,9 +45,3 @@ class DailyTorrentsDatabase:
 		
 		con.commit()
 		con.close()
-
-
-a = DailyTorrentsDatabase()
-print a.movieExists("kiss")
-a.insertMovie("kiss", ":::LONG URLMAN")
-print a.movieExists("kiss")
